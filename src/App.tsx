@@ -1,7 +1,9 @@
+import NavBar from "./components/NavBar";
+
 function App(): JSX.Element {
   return (
     <>
-      <p>hello world</p>
+      <NavBar />
     </>
   );
 }
