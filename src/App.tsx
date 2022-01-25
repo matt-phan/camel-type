@@ -1,7 +1,15 @@
+import NavBar from "./components/NavBar";
+import { Routes, Route } from "react-router-dom";
+
 function App(): JSX.Element {
   return (
     <>
-      <p>hello world</p>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<>race</>} />
+        <Route path="/pit-stop" element={<>pit stop</>} />
+        <Route path="/leaderboard" element={<>leaderboard</>} />
+      </Routes>
     </>
   );
 }
