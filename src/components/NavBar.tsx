@@ -1,4 +1,4 @@
-import { Flex, Spacer, Heading, Text, Icon, HStack } from "@chakra-ui/react";
+import { Flex, Spacer, Heading, Icon } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaHorseHead } from "react-icons/fa";
 import NavBarButtons from "./NavBarButtons";
