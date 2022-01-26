@@ -7,6 +7,7 @@ function NavBarButtons() {
       <Button
         mr={3}
         colorScheme="teal"
+        size="sm"
         onClick={() =>
           toast({
             title: "We can't sign you up just yet!",
@@ -22,6 +23,7 @@ function NavBarButtons() {
       <Button
         mr={3}
         colorScheme="teal"
+        size="sm"
         onClick={() =>
           toast({
             title: "We can't sign you in just yet!",

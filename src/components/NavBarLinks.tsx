@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function NavBarLinks() {
   return (
-    <HStack spacing={1} ml={8}>
+    <HStack spacing={5} ml={8}>
       <Link to="/">
         <Text color="whiteAlpha.900">Race</Text>
       </Link>
