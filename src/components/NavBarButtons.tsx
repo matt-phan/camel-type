@@ -5,8 +5,8 @@ function NavBarButtons() {
   return (
     <>
       <Button
-        mr={3}
-        colorScheme="orange"
+        mr={2}
+        colorScheme="blue"
         size="sm"
         onClick={() =>
           toast({
