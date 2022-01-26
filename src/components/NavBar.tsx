@@ -7,10 +7,10 @@ import NavBarLinks from "./NavBarLinks";
 function NavBar() {
   return (
     <Flex bg="blackAlpha.900" alignItems="center">
-      <Heading size="lg" p={3} color="whiteAlpha.900">
-        <Link to="/">Head typing</Link>
+      <Heading size="lg" p={3} color="white">
+        <Link to="/">Camel type</Link>
       </Heading>
-      <Icon as={GiCamelHead} color="whiteAlpha.900" width={8} height={8} />
+      <Icon as={GiCamelHead} color="bisque" width={8} height={8} />
       <NavBarLinks />
       <Spacer />
       <NavBarButtons />
