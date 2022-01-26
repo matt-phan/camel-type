@@ -17,11 +17,6 @@ function RacePageGif({ setPlay }: RacePageGifProps) {
           className="giphy-embed"
           allowFullScreen
         ></iframe>
-        <p>
-          <a href="https://giphy.com/gifs/reaction-typing-unpopular-opinion-13GIgrGdslD9oQ">
-            via GIPHY
-          </a>
-        </p>
       </Box>
       <Button colorScheme="green" onClick={() => setPlay(true)}>
         Race!
