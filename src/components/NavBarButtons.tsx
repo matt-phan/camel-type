@@ -6,7 +6,7 @@ function NavBarButtons() {
     <>
       <Button
         mr={3}
-        colorScheme="teal"
+        colorScheme="orange"
         size="sm"
         onClick={() =>
           toast({
@@ -22,7 +22,7 @@ function NavBarButtons() {
       </Button>
       <Button
         mr={3}
-        colorScheme="teal"
+        colorScheme="green"
         size="sm"
         onClick={() =>
           toast({
