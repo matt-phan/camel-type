@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import { Quote } from "../utils/types";
 import useStopwatch from "../utils/useStopwatch";
+import { useAuth } from "../contexts/AuthContext";
 
 interface RacePagePlayProps {
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,10 +28,14 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [isFirstKeyPress, setIsFirstKeyPress] = useState<boolean>(true);
   const { time, handleStart, handlePause, handleReset } = useStopwatch();
+  const { currentUser } = useAuth();
   const toast = useToast();
 
   const baseQuoteUrl =
     process.env.REACT_APP_QUOTE_API ?? "https://api.quotable.io";
+
+  const baseApiUrl =
+    process.env.REACT_APP_HEAD_API ?? "https://head-type-backend.herokuapp.com";
 
   const getQuote = useCallback(async () => {
     try {
@@ -85,21 +90,38 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
     return currInput === quoteWords[currWordIndex];
   };
 
-  const handleFinish = (key: string) => {
+  const handleFinish = async (key: string) => {
     if (
       currWordIndex === quoteWords.length - 1 &&
       currCharIndex === quoteWords[currWordIndex].length - 1 &&
-      doesCharMatch(key)
+      doesCharMatch(key) &&
+      quote !== undefined
     ) {
-      toast({
-        title: "Finished! Click refresh to race again!",
-        description: "",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
       setIsFinished(true);
       handlePause();
+      if (currentUser) {
+        await axios.post(`${baseApiUrl}/users/${currentUser.id}/races`, {
+          quote_id: quote._id,
+          wpm: Math.round(quote.length / 5 / (time / 1000 / 60)),
+          accuracy: 0,
+          milliseconds_elapsed: time,
+        });
+        toast({
+          title: "Finished! Click refresh to race again!",
+          description: "",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Finished! But please sign in next time to save your result",
+          description: "",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
 
@@ -120,14 +142,14 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
         <Spinner size="xl" mt={39} />
       ) : (
         <>
-          <p>
+          {/* <p>
             <strong>quote:</strong> {JSON.stringify(quote)}
-          </p>
+          </p> */}
           {/*development purposes*/}
-          <p>
+          {/* <p>
             <strong>quote content split:</strong>
             {JSON.stringify(quoteWords)}
-          </p>
+          </p> */}
           {/*development purposes*/}
           <HStack>
             {quote.tags.map((tag, idx) => (
