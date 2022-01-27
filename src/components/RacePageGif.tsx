@@ -9,19 +9,14 @@ function RacePageGif({ setPlay }: RacePageGifProps) {
     <VStack spacing={5}>
       <Box>
         <iframe
-          src="https://giphy.com/embed/13GIgrGdslD9oQ"
-          title="typing"
+          src="https://giphy.com/embed/13j7rnoKJUWt8c"
           width="480"
-          height="288"
+          height="270"
           frameBorder="0"
           className="giphy-embed"
+          title="camel"
           allowFullScreen
         ></iframe>
-        <p>
-          <a href="https://giphy.com/gifs/reaction-typing-unpopular-opinion-13GIgrGdslD9oQ">
-            via GIPHY
-          </a>
-        </p>
       </Box>
       <Button colorScheme="green" onClick={() => setPlay(true)}>
         Race!
