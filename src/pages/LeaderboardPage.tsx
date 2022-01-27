@@ -11,13 +11,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useState, useCallback, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { Race } from "../utils/types";
 import axios from "axios";
 
 function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<Race[]>([]);
-  const { currentUser } = useAuth();
 
   const baseApiUrl =
     process.env.REACT_APP_HEAD_API ?? "https://head-type-backend.herokuapp.com";
