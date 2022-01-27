@@ -37,7 +37,6 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
       const res = await axios.get(`${baseQuoteUrl}/random`, {
         params: { maxLength: 100, minLength: 25 },
       });
-      console.log(res.data);
       setQuote(res.data);
       setQuoteWords(res.data.content.split(" "));
     } catch (error) {
@@ -152,11 +151,9 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
             <Button onClick={() => setPlay(false)} colorScheme="red">
               Back
             </Button>
-            {isFinished && (
-              <Button colorScheme="green" onClick={handleLoadNextRace}>
-                Next Race
-              </Button>
-            )}
+            <Button colorScheme="green" onClick={handleLoadNextRace}>
+              New Race
+            </Button>
           </HStack>
           <Text>
             <strong>WPM: </strong>
