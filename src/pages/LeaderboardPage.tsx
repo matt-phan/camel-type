@@ -9,6 +9,8 @@ import {
   Container,
   Spinner,
   VStack,
+  Heading,
+  Divider,
 } from "@chakra-ui/react";
 import { useState, useCallback, useEffect } from "react";
 import { Race } from "../utils/types";
@@ -35,25 +37,29 @@ function LeaderboardPage() {
         {leaderboard.length === 0 ? (
           <Spinner size="xl" mt={39} />
         ) : (
-          <Table variant="simple">
-            <TableCaption>Top 10 fastest races of all time</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Position</Th>
-                <Th>Name</Th>
-                <Th>WPM</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {leaderboard.map((race, idx) => (
+          <>
+            <Heading size="lg">{leaderboard[0].user_name} 🏆</Heading>
+            <Divider colorScheme="blackAlpha" variant="dashed" />
+            <Table variant="simple">
+              <TableCaption>Top 10 fastest races of all time</TableCaption>
+              <Thead>
                 <Tr>
-                  <Td>{idx + 1}</Td>
-                  <Td>{race.user_name}</Td>
-                  <Td>{race.wpm}</Td>
+                  <Th>Position</Th>
+                  <Th>Name</Th>
+                  <Th>WPM</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {leaderboard.map((race, idx) => (
+                  <Tr>
+                    <Td>{idx + 1}</Td>
+                    <Td>{race.user_name}</Td>
+                    <Td>{race.wpm}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </>
         )}
       </VStack>
     </Container>
