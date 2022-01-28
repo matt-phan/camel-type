@@ -46,7 +46,7 @@ function PitStopPage() {
       const res = await axios.get(
         `${baseApiUrl}/users/${currentUser.id}/races`
       );
-      setRaceHistory(res.data.data.users);
+      setRaceHistory(res.data.data.users); // should be races not users once the backend is pushed
     }
   }, [baseApiUrl, currentUser]);
 
