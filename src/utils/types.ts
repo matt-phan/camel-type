@@ -28,3 +28,9 @@ export interface Race extends NewRace {
   user_id: number;
   created_at: number;
 }
+
+export interface Stats {
+  average: number;
+  best: number;
+  no_races: number;
+}

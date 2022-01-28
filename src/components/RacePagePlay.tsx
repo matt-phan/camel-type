@@ -40,7 +40,7 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
   const getQuote = useCallback(async () => {
     try {
       const res = await axios.get(`${baseQuoteUrl}/random`, {
-        params: { maxLength: 100, minLength: 25 },
+        params: { maxLength: 100, minLength: 50 },
       });
       setQuote(res.data);
       setQuoteWords(res.data.content.split(" "));
@@ -187,6 +187,11 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
             <strong>Seconds elapsed: </strong>
             {Math.round(time / 1000)}
           </Text>
+          {isFinished && (
+            <Text>
+              <em>By {quote.author}</em>
+            </Text>
+          )}
         </>
       )}
     </VStack>
