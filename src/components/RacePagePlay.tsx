@@ -14,6 +14,10 @@ import axios from "axios";
 import { Quote } from "../utils/types";
 import useStopwatch from "../utils/useStopwatch";
 import { useAuth } from "../contexts/AuthContext";
+import QuoteTags from "./QuoteTags";
+import RaceStats from "./RaceStats";
+import RaceButtons from "./RaceButtons";
+import QuoteWord from "./QuoteWord";
 
 interface RacePagePlayProps {
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,12 +25,9 @@ interface RacePagePlayProps {
 
 function RacePagePlay({ setPlay }: RacePagePlayProps) {
   const [quote, setQuote] = useState<Quote>();
-  const [quoteWords, setQuoteWords] = useState<string[]>([]);
   const [currInput, setCurrInput] = useState<string>("");
-  const [currCharIndex, setCurrCharIndex] = useState<number>(0);
   const [currWordIndex, setCurrWordIndex] = useState<number>(0);
   const [isFinished, setIsFinished] = useState<boolean>(false);
-  const [isFirstKeyPress, setIsFirstKeyPress] = useState<boolean>(true);
   const { time, handleStart, handlePause, handleReset } = useStopwatch();
   const { currentUser } = useAuth();
   const toast = useToast();
@@ -43,7 +44,6 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
         params: { maxLength: 100, minLength: 50 },
       });
       setQuote(res.data);
-      setQuoteWords(res.data.content.split(" "));
     } catch (error) {
       console.log(`something went wrong: ${error}`);
     }
@@ -53,75 +53,33 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
     getQuote();
   }, [getQuote]);
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    // start the stop watch if its the first key press
-    if (isFirstKeyPress) {
+  const quoteWords = quote ? quote.content.split(" ") : [];
+
+  const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // determine when the first key press is to start timer
+    if (e.target.value.length === 1 && currWordIndex === 0) {
       handleStart();
-      setIsFirstKeyPress(false);
     }
 
-    // change certain states based on certain key presses
-    if (event.key === "Shift") {
-      // do nothing
-    } else if (event.key === "Backspace") {
-      currCharIndex > 0 && setCurrCharIndex((prevIdx) => prevIdx - 1); // ensure character index can't go negative
-    } else if (event.key === " ") {
-      if (doesWordMatch()) {
-        setCurrInput("");
-        currWordIndex < quoteWords.length - 1 && // ensure word index can't be above total number of words - 1
-          setCurrWordIndex((prevIdx) => prevIdx + 1);
-        setCurrCharIndex(0);
-      }
+    // handle typing and clearing of the input
+    if (e.target.value === quoteWords[currWordIndex] + " ") {
+      setCurrInput("");
+      setCurrWordIndex((prevIdx) => prevIdx + 1);
     } else {
-      setCurrCharIndex((prevIdx) => prevIdx + 1);
+      setCurrInput(e.target.value);
     }
 
-    handleFinish(event.key);
+    // finish condition
+    handleFinish(e);
   };
 
-  const doesCharMatch = (key: string) => {
-    return (
-      currCharIndex < quoteWords[currWordIndex].length &&
-      quoteWords[currWordIndex][currCharIndex] === key
-    );
-  };
-
-  const doesWordMatch = () => {
-    return currInput === quoteWords[currWordIndex];
-  };
-
-  const handleFinish = async (key: string) => {
+  const handleFinish = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (
       currWordIndex === quoteWords.length - 1 &&
-      currCharIndex === quoteWords[currWordIndex].length - 1 &&
-      doesCharMatch(key) &&
-      quote !== undefined
+      e.target.value === quoteWords[currWordIndex]
     ) {
       setIsFinished(true);
       handlePause();
-      if (currentUser) {
-        await axios.post(`${baseApiUrl}/users/${currentUser.id}/races`, {
-          quote_id: quote._id,
-          wpm: Math.round(quote.length / 5 / (time / 1000 / 60)),
-          accuracy: 0,
-          milliseconds_elapsed: time,
-        });
-        toast({
-          title: "Finished! Click refresh to race again!",
-          description: "",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: "Finished! But please sign in next time to save your result",
-          description: "",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
     }
   };
 
@@ -131,9 +89,7 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
     handleReset();
     setIsFinished(false);
     setCurrInput("");
-    setCurrCharIndex(0);
     setCurrWordIndex(0);
-    setIsFirstKeyPress(true);
   };
 
   return (
@@ -142,56 +98,32 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
         <Spinner size="xl" mt={39} />
       ) : (
         <>
-          {/* <p>
-            <strong>quote:</strong> {JSON.stringify(quote)}
-          </p> */}
-          {/*development purposes*/}
-          {/* <p>
-            <strong>quote content split:</strong>
-            {JSON.stringify(quoteWords)}
-          </p> */}
-          {/*development purposes*/}
-          <HStack>
-            {quote.tags.map((tag, idx) => (
-              <Tag key={idx}>{tag}</Tag>
-            ))}
-          </HStack>
+          <QuoteTags quote={quote} />
           <Box borderWidth={1} borderColor="blackAlpha.200" borderRadius={8}>
             <Text p={4}>
-              {quote.content.split("").map((char) => (
-                <span>{char}</span>
+              {quoteWords.map((word, wordIdx) => (
+                <QuoteWord
+                  word={word}
+                  wordIdx={wordIdx}
+                  currWordIdx={currWordIndex}
+                  currInput={currInput}
+                  quoteWords={quoteWords}
+                  isFinished={isFinished}
+                />
               ))}
             </Text>
           </Box>
           <Input
-            onKeyDown={handleKeyDown}
             value={currInput}
-            onChange={(e) => setCurrInput(e.target.value.trim())}
+            onChange={handleTyping}
             isDisabled={isFinished}
+            autoFocus
           ></Input>
-          <HStack>
-            <Button onClick={() => setPlay(false)} colorScheme="red">
-              Back
-            </Button>
-            <Button colorScheme="green" onClick={handleLoadNextRace}>
-              New Race
-            </Button>
-          </HStack>
-          <Text>
-            <strong>WPM: </strong>
-            {!isFinished
-              ? "pending..."
-              : Math.round(quote.length / 5 / (time / 1000 / 60))}
-          </Text>
-          <Text>
-            <strong>Seconds elapsed: </strong>
-            {Math.round(time / 1000)}
-          </Text>
-          {isFinished && (
-            <Text>
-              <em>By {quote.author}</em>
-            </Text>
-          )}
+          <RaceButtons
+            setPlay={setPlay}
+            handleLoadNextRace={handleLoadNextRace}
+          />
+          <RaceStats isFinished={isFinished} time={time} quote={quote} />
         </>
       )}
     </VStack>
@@ -199,3 +131,10 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
 }
 
 export default RacePagePlay;
+
+/*
+Plan for refactoring the typing algorithm:
+1) Use onChange only
+2) Use util functions to determine when a space has been pressed using the value, onChange double binding
+3) For now, just detect when the word is correct, click space to clear the input and move on to the next word
+*/
