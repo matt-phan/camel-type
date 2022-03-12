@@ -1,15 +1,5 @@
-import { useState, useEffect, useCallback, KeyboardEvent } from "react";
-import {
-  VStack,
-  Button,
-  Box,
-  Text,
-  Input,
-  Tag,
-  HStack,
-  Spinner,
-  useToast,
-} from "@chakra-ui/react";
+import { useState, useEffect, useCallback } from "react";
+import { VStack, Box, Text, Input, Spinner, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { Quote } from "../utils/types";
 import useStopwatch from "../utils/useStopwatch";
@@ -73,13 +63,38 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
     handleFinish(e);
   };
 
-  const handleFinish = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFinish = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (
       currWordIndex === quoteWords.length - 1 &&
-      e.target.value === quoteWords[currWordIndex]
+      e.target.value === quoteWords[currWordIndex] &&
+      quote !== undefined
     ) {
       setIsFinished(true);
       handlePause();
+
+      if (currentUser) {
+        await axios.post(`${baseApiUrl}/users/${currentUser.id}/races`, {
+          quote_id: quote._id,
+          wpm: Math.round(quote.length / 5 / (time / 1000 / 60)),
+          accuracy: 0,
+          milliseconds_elapsed: time,
+        });
+        toast({
+          title: "Finished! Click refresh to race again!",
+          description: "",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Finished! But please sign in next time to save your result",
+          description: "",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
 
@@ -131,10 +146,3 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
 }
 
 export default RacePagePlay;
-
-/*
-Plan for refactoring the typing algorithm:
-1) Use onChange only
-2) Use util functions to determine when a space has been pressed using the value, onChange double binding
-3) For now, just detect when the word is correct, click space to clear the input and move on to the next word
-*/
