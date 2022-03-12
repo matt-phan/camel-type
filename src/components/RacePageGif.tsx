@@ -1,4 +1,5 @@
 import { VStack, Box, Button, Divider } from "@chakra-ui/react";
+import { Adsense } from "@ctrl/react-adsense";
 
 interface RacePageGifProps {
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,6 +23,7 @@ function RacePageGif({ setPlay }: RacePageGifProps) {
         Race!
       </Button>
       <Divider />
+      <Adsense client="ca-pub-5343163419903277" slot="7259870550" />
     </VStack>
   );
 }
