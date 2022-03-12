@@ -12,7 +12,7 @@ const useStopwatch = () => {
       interval = setInterval(() => {
         setTime((time) => time + 10);
       }, 10);
-    } else {
+    } else if (interval) {
       clearInterval(interval);
     }
     return () => {
