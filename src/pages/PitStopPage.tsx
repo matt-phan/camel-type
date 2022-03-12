@@ -14,6 +14,7 @@ import {
   Th,
   Td,
   TableCaption,
+  Center,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
@@ -106,28 +107,27 @@ function PitStopPage() {
             {raceHistory.length === 0 ? (
               <Spinner size="xl" mt={39} />
             ) : (
-              <Table variant="simple">
-                <TableCaption>{currentUser.name}'s race history</TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th>No.</Th>
-                    <Th>WPM</Th>
-                    <Th>When</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {raceHistory.map((race, idx) => (
+              <Center>
+                <Table variant="simple">
+                  <TableCaption>{currentUser.name}'s race history</TableCaption>
+                  <Thead>
                     <Tr>
-                      <Td>{raceHistory.length - idx}</Td>
-                      <Td>{race.wpm}</Td>
-                      <Td>
-                        {/*timestampConverterToGB(race.created_at)*/}
-                        {timestampConverter(race.created_at)}
-                      </Td>
+                      <Th>No.</Th>
+                      <Th>WPM</Th>
+                      <Th>When</Th>
                     </Tr>
-                  ))}
-                </Tbody>
-              </Table>
+                  </Thead>
+                  <Tbody>
+                    {raceHistory.map((race, idx) => (
+                      <Tr>
+                        <Td>{raceHistory.length - idx}</Td>
+                        <Td>{race.wpm}</Td>
+                        <Td>{timestampConverter(race.created_at)}</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </Center>
             )}
           </VStack>
         </>
