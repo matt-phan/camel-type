@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { VStack, Box, Text, Input, Spinner, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { Quote } from "../utils/types";
-import useStopwatch from "../utils/useStopwatch";
+import useStopwatch from "../hooks/useStopwatch";
 import { useAuth } from "../contexts/AuthContext";
 import QuoteTags from "./QuoteTags";
 import RaceStats from "./RaceStats";
@@ -22,11 +22,9 @@ function RacePagePlay({ setPlay }: RacePagePlayProps) {
   const { currentUser } = useAuth();
   const toast = useToast();
 
-  const baseQuoteUrl =
-    process.env.REACT_APP_QUOTE_API ?? "https://api.quotable.io";
+  const baseQuoteUrl = process.env.REACT_APP_QUOTE_API;
 
-  const baseApiUrl =
-    process.env.REACT_APP_HEAD_API ?? "https://head-type-backend.herokuapp.com";
+  const baseApiUrl = process.env.REACT_APP_HEAD_API;
 
   const getQuote = useCallback(async () => {
     try {
