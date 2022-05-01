@@ -19,8 +19,7 @@ import axios from "axios";
 function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<Race[]>([]);
 
-  const baseApiUrl =
-    process.env.REACT_APP_HEAD_API ?? "https://head-type-backend.herokuapp.com";
+  const baseApiUrl = process.env.REACT_APP_HEAD_API;
 
   const getLeaderboard = useCallback(async () => {
     const res = await axios.get(`${baseApiUrl}/leaderboard`);

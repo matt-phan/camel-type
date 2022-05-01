@@ -30,8 +30,7 @@ function PitStopPage() {
   const [raceHistory, setRaceHistory] = useState<Race[]>([]);
   const { currentUser } = useAuth();
 
-  const baseApiUrl =
-    process.env.REACT_APP_HEAD_API ?? "https://head-type-backend.herokuapp.com";
+  const baseApiUrl = process.env.REACT_APP_HEAD_API;
 
   const getStats = useCallback(async () => {
     if (currentUser) {
@@ -47,7 +46,7 @@ function PitStopPage() {
       const res = await axios.get(
         `${baseApiUrl}/users/${currentUser.id}/races`
       );
-      setRaceHistory(res.data.data.races); // should be races not users once the backend is pushed
+      setRaceHistory(res.data.data.races);
     }
   }, [baseApiUrl, currentUser]);
 

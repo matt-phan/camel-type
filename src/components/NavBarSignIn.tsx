@@ -9,8 +9,7 @@ function NavBarSignIn() {
   const [users, setUsers] = useState<User[]>([]);
   const { currentUser, signIn, signOut } = useAuth();
 
-  const baseApiUrl =
-    process.env.REACT_APP_HEAD_API ?? "https://head-type-backend.herokuapp.com";
+  const baseApiUrl = process.env.REACT_APP_HEAD_API;
 
   const getUsers = useCallback(async () => {
     try {
