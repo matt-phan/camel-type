@@ -27,7 +27,7 @@ export class AppController {
     return await this.appService.getLeaderboard();
   }
 
-  @Get('users/:id/stats')
+  @Get('/users/:id/stats')
   async getUserStatsById(@Param('id') id: number) {
     return await this.appService.getUserStatsById(id);
   }

@@ -10,6 +10,8 @@ services:
       - REACT_APP_HEAD_API=/api
       - REACT_APP_GIF_API=https://g.tenor.com/v1
       - REACT_APP_GIF_API_KEY=21MY2QDI5T58
+    volumes:
+      - ./client/src:/app/src
   database:
     build: ./database
     environment:
@@ -26,6 +28,8 @@ services:
       - POSTGRES_HOST=database
       - POSTGRES_PASSWORD=password
       - POSTGRES_DATABASE=database
+    volumes:
+      - ./server/src:/app/src
   nginx:
     restart: always
     build: ./nginx
