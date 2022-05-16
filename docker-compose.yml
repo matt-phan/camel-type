@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  client:
+    build: ./client
+    depends_on:
+      - api
+    environment:
+      - REACT_APP_QUOTE_API=https://api.quotable.io
+      - REACT_APP_HEAD_API=/api
+      - REACT_APP_GIF_API=https://g.tenor.com/v1
+      - REACT_APP_GIF_API_KEY=21MY2QDI5T58
+  database:
+    build: ./database
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
+  api:
+    build: ./server
+    depends_on:
+      - database
+    environment:
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=user
+      - POSTGRES_HOST=database
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DATABASE=database
+  nginx:
+    restart: always
+    build: ./nginx
+    ports:
+      - "3050:80"
